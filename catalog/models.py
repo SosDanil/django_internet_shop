@@ -25,7 +25,6 @@ class Product(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='создано')
     updated_at = models.DateTimeField(auto_now=True, verbose_name='обновлено')
 
-
     def __str__(self):
         return f'{self.name} ({self.category}), цена - {self.price}'
 
