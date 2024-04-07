@@ -17,7 +17,7 @@
   },
   {
     "model": "catalog.product",
-    "pk": 2,
+    "pk": 1,
     "fields": {
       "name": "огурец",
       "description": "зеленый, продолговатый, горчит",
@@ -30,7 +30,7 @@
   },
   {
     "model": "catalog.product",
-    "pk": 3,
+    "pk": 2,
     "fields": {
       "name": "помидор",
       "description": "красный, шарообразный, мягкий",
@@ -43,7 +43,7 @@
   },
   {
     "model": "catalog.product",
-    "pk": 4,
+    "pk": 3,
     "fields": {
       "name": "телефон",
       "description": "звонит, есть калькулятор, часы",
@@ -56,7 +56,7 @@
   },
   {
     "model": "catalog.product",
-    "pk": 5,
+    "pk": 4,
     "fields": {
       "name": "компьютер",
       "description": "можно работать, серфить в интернете",
