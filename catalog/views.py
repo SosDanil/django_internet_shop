@@ -13,16 +13,20 @@ def home(request):
 
 
 def contacts(request):
+    context = {
+        'title': 'Контакты'
+    }
     if request.method == 'POST':
         name = request.POST.get('name')
         phone = request.POST.get('phone')
         message = request.POST.get('message')
         print(f'{name} ({phone}): {message}')
-    return render(request, 'catalog/contacts.html')
+    return render(request, 'catalog/contacts.html', context)
 
 
 def product(request, pk):
     context = {
-        'object': Product.objects.get(pk=pk)
+        'object': Product.objects.get(pk=pk),
+        'title': 'Описание продукта'
     }
     return render(request, 'catalog/product.html', context)
