@@ -1,10 +1,11 @@
 {% extends 'catalog/base.html' %}
+{% load my_tags %}
 {% block content %}
 <div class="row">
     <div class="col-md-4">
         <div class="card mb-4 box-shadow">
             <img class="card-img-top"
-                 src="/media/{{object.preview}}"
+                 src="{{ object.preview|mymedia }}"
                  alt="Card image cap">
             <div class="card-body">
                 <p class="card-text">Наименование продукта: {{ object.name }}</p>
