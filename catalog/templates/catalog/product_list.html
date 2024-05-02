@@ -1,0 +1,30 @@
+{% extends 'catalog/base.html' %}
+{% block content %}
+<div class="row">
+    <div class="row text-center">
+        <div class="col-12 mb-5">
+            <a class="btn btn-success" href="{% url 'catalog:create' %}">Добавить продукт</a>
+        </div>
+        {% for object in object_list %}
+        <div class="col-3">
+            <div class="card mb-4 box-shadow">
+                <div class="card-header">
+                    <h4 class="my-0 font-weight-normal">{{ object.name|title }}</h4>
+                </div>
+                <div class="card-body">
+                    <p>{{ object.description|truncatechars:25 }}</p>
+                    <div class="btn-group" role="group" aria-label="Basic mixed styles example">
+                        <a href="{% url 'catalog:product' object.pk %}" type="button"
+                           class="btn btn-sm btn-outline-primary">Перейти</a>
+                        <a href="{% url 'catalog:update' object.pk %}" type="button"
+                           class="btn btn-sm btn-outline-secondary">Изменить</a>
+                        <a href="{% url 'catalog:delete' object.pk %}" type="button"
+                           class="btn btn-sm btn-outline-danger">Удалить</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
