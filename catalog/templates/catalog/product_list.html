@@ -10,6 +10,7 @@
             <div class="card mb-4 box-shadow">
                 <div class="card-header">
                     <h4 class="my-0 font-weight-normal">{{ object.name|title }}</h4>
+                    <p class="card-text">Текущая версия: {{ object.version }}</p>
                 </div>
                 <div class="card-body">
                     <p>{{ object.description|truncatechars:25 }}</p>

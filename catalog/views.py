@@ -13,18 +13,14 @@ class ProductListView(ListView):
         'title': 'Главная'
     }
 
-    # def get_context_data(self, *args, **kwargs):
-    #     context_data = super().get_context_data()
-    #     version_list = []
-    #     for object_prod in self.object_list:
-    #         product = Product.objects.get(pk=object_prod.pk)
-    #         object_version = product.version_set.filter(is_current=True)
-    #         active_version = object_version[0]
-    #         version_list.append(active_version)
-    #
-    #     context_data['versions'] = version_list
-    #     return context_data
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        objects = context_data['object_list']
+        for one_object in objects:
+            one_object.version = one_object.version_set.get(is_current=True)
+        context_data['object_list'] = objects
 
+        return context_data
 
 class ProductDetailView(DetailView):
     model = Product
