@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.forms import inlineformset_factory
 from django.shortcuts import render
 from django.urls import reverse_lazy
@@ -13,14 +14,14 @@ class ProductListView(ListView):
         'title': 'Главная'
     }
 
-    def get_context_data(self, **kwargs):
-        context_data = super().get_context_data(**kwargs)
-        objects = context_data['object_list']
-        for one_object in objects:
-            one_object.version = one_object.version_set.get(is_current=True)
-        context_data['object_list'] = objects
-
-        return context_data
+    # def get_context_data(self, **kwargs):
+    #     context_data = super().get_context_data(**kwargs)
+    #     objects = context_data['object_list']
+    #     for one_object in objects:
+    #         one_object.version = one_object.version_set.get(is_current=True)
+    #     context_data['object_list'] = objects
+    #
+    #     return context_data
 
 
 class ProductDetailView(DetailView):
@@ -29,25 +30,36 @@ class ProductDetailView(DetailView):
         'title': 'Описание продукта'
     }
 
-    def get_context_data(self, **kwargs):
-        context_data = super().get_context_data(**kwargs)
-        product = Product.objects.get(pk=self.object.pk)
-        active_version = product.version_set.filter(is_current=True)
-        context_data['version'] = active_version[0]
+    # def get_context_data(self, **kwargs):
+    #     context_data = super().get_context_data(**kwargs)
+    #     product = Product.objects.get(pk=self.object.pk)
+    #     active_version = product.version_set.filter(is_current=True)
+    #     context_data['version'] = active_version[0]
+    #
+    #     return context_data
 
-        return context_data
 
-
-class ProductCreateView(CreateView):
+class ProductCreateView(LoginRequiredMixin, CreateView):
     model = Product
     form_class = ProductForm
     success_url = reverse_lazy('catalog:home')
 
+    login_url = '/users/register/'
 
-class ProductUpdateView(UpdateView):
+    def form_valid(self, form):
+        product = form.save()
+        user = self.request.user
+        product.owner = user
+        product.save()
+        return super().form_invalid(form)
+
+
+class ProductUpdateView(LoginRequiredMixin, UpdateView):
     model = Product
     form_class = ProductForm
     success_url = reverse_lazy('catalog:home')
+
+    login_url = '/users/register/'
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
@@ -72,9 +84,10 @@ class ProductUpdateView(UpdateView):
             return self.render_to_response(self.get_context_data(form=form, formset=formset))
 
 
-class ProductDeleteView(DeleteView):
+class ProductDeleteView(LoginRequiredMixin, DeleteView):
     model = Product
     success_url = reverse_lazy('catalog:home')
+    login_url = '/users/register/'
 
 
 class ContactsPageView(TemplateView):
