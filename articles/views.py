@@ -7,6 +7,9 @@ from articles.models import Article
 
 class ArticleListView(ListView):
     model = Article
+    extra_context = {
+        'title': 'Статьи'
+    }
 
     def get_queryset(self, *args, **kwargs):
         queryset = super().get_queryset(*args, **kwargs)
