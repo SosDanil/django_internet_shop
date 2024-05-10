@@ -22,6 +22,7 @@ class ProductListView(ListView):
 
         return context_data
 
+
 class ProductDetailView(DetailView):
     model = Product
     extra_context = {
