@@ -7,13 +7,7 @@
             <div class="card">
                 <div class="card-body">
                     {% csrf_token %}
-                    {{ form.as_p }}
-                    <button type="submit" class="btn btn-primary">
-                        Войти
-                    </button>
-                    <a class="btn btn-info" href="{% url 'users:reset' %}">
-                        Забыл пароль
-                    </a>
+                    <input class="text" name="mail" placeholder="Введите почту">
                 </div>
             </div>
         </div>
