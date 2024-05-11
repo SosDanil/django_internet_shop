@@ -3,6 +3,7 @@ from django.forms import inlineformset_factory
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, TemplateView, CreateView, UpdateView, DeleteView
+from django.core.exceptions import ObjectDoesNotExist
 
 from catalog.forms import ProductForm, VersionForm
 from catalog.models import Product, Version
@@ -14,14 +15,17 @@ class ProductListView(ListView):
         'title': 'Главная'
     }
 
-    # def get_context_data(self, **kwargs):
-    #     context_data = super().get_context_data(**kwargs)
-    #     objects = context_data['object_list']
-    #     for one_object in objects:
-    #         one_object.version = one_object.version_set.get(is_current=True)
-    #     context_data['object_list'] = objects
-    #
-    #     return context_data
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        objects = context_data['object_list']
+        for one_object in objects:
+            try:
+                one_object.version = one_object.version_set.get(is_current=True)
+            except ObjectDoesNotExist:
+                one_object.version = None
+        context_data['object_list'] = objects
+
+        return context_data
 
 
 class ProductDetailView(DetailView):
@@ -30,13 +34,15 @@ class ProductDetailView(DetailView):
         'title': 'Описание продукта'
     }
 
-    # def get_context_data(self, **kwargs):
-    #     context_data = super().get_context_data(**kwargs)
-    #     product = Product.objects.get(pk=self.object.pk)
-    #     active_version = product.version_set.filter(is_current=True)
-    #     context_data['version'] = active_version[0]
-    #
-    #     return context_data
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        our_object = context_data['object']
+        try:
+            our_object.version = our_object.version_set.get(is_current=True)
+        except ObjectDoesNotExist:
+            our_object.version = None
+        context_data['object'] = our_object
+        return context_data
 
 
 class ProductCreateView(LoginRequiredMixin, CreateView):
