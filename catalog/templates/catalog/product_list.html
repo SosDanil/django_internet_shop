@@ -8,25 +8,29 @@
         </div>
         {% endif %}
         {% for object in object_list %}
-        <div class="col-3">
-            <div class="card mb-4 box-shadow">
-                <div class="card-header">
-                    <h4 class="my-0 font-weight-normal">{{ object.name|title }}</h4>
-                    <p class="card-text">Текущая версия: {{ object.version }}</p>
-                </div>
-                <div class="card-body">
-                    <p>{{ object.description|truncatechars:25 }}</p>
-                    <div class="btn-group" role="group" aria-label="Basic mixed styles example">
-                        <a href="{% url 'catalog:product' object.pk %}" type="button"
-                           class="btn btn-sm btn-outline-primary">Перейти</a>
-                        <a href="{% url 'catalog:update' object.pk %}" type="button"
-                           class="btn btn-sm btn-outline-secondary">Изменить</a>
-                        <a href="{% url 'catalog:delete' object.pk %}" type="button"
-                           class="btn btn-sm btn-outline-danger">Удалить</a>
+        {% if object.is_published %}
+            <div class="col-3">
+                <div class="card mb-4 box-shadow">
+                    <div class="card-header">
+                        <h4 class="my-0 font-weight-normal">{{ object.name|title }}</h4>
+                        <p class="card-text">Текущая версия: {{ object.version }}</p>
+                    </div>
+                    <div class="card-body">
+                        <p>{{ object.description|truncatechars:25 }}</p>
+                        <div class="btn-group" role="group" aria-label="Basic mixed styles example">
+                            <a href="{% url 'catalog:product' object.pk %}" type="button"
+                               class="btn btn-sm btn-outline-primary">Перейти</a>
+                            {% if perms.catalog.can_edit_category and perms.catalog.can_edit_description and perms.catalog.can_change_published or user == object.owner %}
+                            <a href="{% url 'catalog:update' object.pk %}" type="button"
+                               class="btn btn-sm btn-outline-secondary">Изменить</a>
+                            {% endif %}
+                            <a href="{% url 'catalog:delete' object.pk %}" type="button"
+                               class="btn btn-sm btn-outline-danger">Удалить</a>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        {% endif %}
         {% endfor %}
     </div>
 </div>
