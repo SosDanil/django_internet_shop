@@ -7,6 +7,7 @@ from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 
 from catalog.forms import ProductForm, VersionForm, ProductModeratorForm
 from catalog.models import Product, Version
+from catalog.services import get_products_from_cache
 
 
 class ProductListView(ListView):
@@ -26,6 +27,9 @@ class ProductListView(ListView):
         context_data['object_list'] = objects
 
         return context_data
+
+    def get_queryset(self):
+        return get_products_from_cache()
 
 
 class ProductDetailView(DetailView):
@@ -97,6 +101,7 @@ class ProductUpdateView(LoginRequiredMixin, UpdateView):
         if user == self.object.owner:
             return ProductForm
         raise PermissionDenied
+
 
 class ProductDeleteView(LoginRequiredMixin, DeleteView):
     model = Product
