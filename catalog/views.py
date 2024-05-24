@@ -6,8 +6,8 @@ from django.views.generic import ListView, DetailView, TemplateView, CreateView,
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 
 from catalog.forms import ProductForm, VersionForm, ProductModeratorForm
-from catalog.models import Product, Version
-from catalog.services import get_products_from_cache
+from catalog.models import Product, Version, Category
+from catalog.services import get_products_from_cache, get_categories_from_cache
 
 
 class ProductListView(ListView):
@@ -107,6 +107,14 @@ class ProductDeleteView(LoginRequiredMixin, DeleteView):
     model = Product
     success_url = reverse_lazy('catalog:home')
     login_url = '/users/register/'
+
+
+class CategoryListView(LoginRequiredMixin, ListView):
+    model = Category
+    login_url = '/users/register/'
+
+    def get_queryset(self):
+        return get_categories_from_cache()
 
 
 class ContactsPageView(TemplateView):
